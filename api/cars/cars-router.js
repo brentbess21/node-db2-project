@@ -1,7 +1,7 @@
 // DO YOUR MAGIC
 const router = require('express').Router();
 const Car = require('./cars-model');
-const { checkCarId } = require('./cars-middleware');
+const { checkCarId, checkCarPayload, checkVinNumberValid, checkVinNumberUnique } = require('./cars-middleware');
 
 
 router.get('/', async (req, res, next)=> {
@@ -13,8 +13,17 @@ router.get('/', async (req, res, next)=> {
     }
 })
 
-router.get('/:id', checkCarId, (req, res, next)=> {
+router.get('/:id', checkCarId, (req, res)=> {
     res.status(200).json(req.car)
+})
+
+router.post('/', checkCarPayload, checkVinNumberValid, checkVinNumberUnique, async (req, res, next)=> {
+    try {
+        const newCar = await Car.create(req.body)
+        res.status(201).json(newCar)
+    } catch (err){
+        next(err)
+    }
 })
 
 
