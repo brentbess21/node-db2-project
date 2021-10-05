@@ -11,7 +11,9 @@ const carSchema = yup.object().shape({
   model: yup.string()
           .required('model is missing'),
   mileage: yup.number()
-          .required('mileage is missing')
+          .required('mileage is missing'),
+  title: yup.string(),
+  transmission: yup.string()
 })
 
 const checkCarId = async (req, res, next) => {
